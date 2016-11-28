@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+
+	<style>
+.vSeparator {
+	border-left: 2px solid #000;
+	margin-left: 80px;
+	padding-left: 10px;
+	height: 400px;
+	margin-top: 0px;
+}
+
+</style>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Login - Economic</title>
+</h:head>
+<h:body>
+
+	<p:outputLabel value="Economic" />
+
+	<p:separator />
+
+	<h:panelGrid columns="3" style="margin:110px 0px 0px 300px">
+
+		<p:graphicImage library="img" name="cat.png" />
+
+		<div class="vSeparator"></div>
+
+		<div class="login">
+
+			<h:form>
+				<p:messages autoUpdate="true" closable="true" />
+				<h:panelGrid columns="2" cellspacing="20px">
+					<p:outputLabel value="Usuário: *" />
+					<p:inputText style="margin-left:15px" size="26"
+						value="#{loginBean.usuario.usuario}" />
+
+					<p:outputLabel value="Senha: *" />
+					<p:password style="margin-left:15px" size="26"
+						value="#{loginBean.usuario.senha}" />
+
+					<p:outputLabel value="" />
+					<p:commandLink value="esqueci minha senha" style="float:right" />
+
+					<p:outputLabel value="" />
+					<p:commandButton value="Acessar" style="float:right"
+						actionListener="#{loginBean.autenticarUsuario}" />
+
+				</h:panelGrid>
+
+
+			</h:form>
+		</div>
+
+	</h:panelGrid>
+
+</h:body>
+</html>

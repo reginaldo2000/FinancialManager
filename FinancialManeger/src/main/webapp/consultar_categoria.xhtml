@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Consultar Categorias</title>
+</h:head>
+<h:body>
+
+	<ui:include src="template.xhtml" />
+
+	<p:panel header="Consultar Categorias"
+		style="width:45%; float:left; margin-left:17%">
+
+		<p:messages autoUpdate="true" closable="true" />
+
+		<h:form id="form-pesquisa">
+
+			<h:panelGrid columns="2">
+
+				<p:inputText style="width:400px"
+					placeholder="Pesquisar por nome da categoria"
+					value="#{categoriaBean.consulta}" />
+
+				<p:commandButton value="Pesquisar" icon="ui-icon-search"
+					update=":tabela" actionListener="#{categoriaBean.consultar}" />
+
+			</h:panelGrid>
+
+		</h:form>
+
+		<p:spacer height="15px" />
+
+		<p:dataTable id="tabela" paginator="true" rows="8"
+			value="#{categoriaBean.listaCategorias}" var="cat">
+
+			<p:column headerText="Nome da Categoria" width="400">
+				<p:outputLabel value="#{cat.nomeCategoria}" />
+			</p:column>
+
+			<p:column headerText="Ação">
+				<center>
+					<p:commandButton value="Editar" icon="fa fa-pencil"
+						onclick="PF('wid-edicao').show();" update=":form-edicao">
+						<f:setPropertyActionListener value="#{cat}"
+							target="#{categoriaBean.categoria}" />
+					</p:commandButton>
+				</center>
+			</p:column>
+
+		</p:dataTable>
+
+	</p:panel>
+
+	<p:dialog widgetVar="wid-edicao" draggable="false" closable="true"
+		showEffect="clip" hideEffect="clip" header="Editar Categoria" modal="true">
+
+		<h:form id="form-edicao">
+
+			<h:panelGrid columns="1">
+
+				<p:outputLabel value="Nome da Categoria: " />
+				<p:inputText value="#{categoriaBean.categoria.nomeCategoria}"
+					maxlength="40" />
+
+				<p:spacer height="10px" />
+				<hr />
+				<p:spacer height="10px" />
+
+				<p:commandButton value="Atualizar"
+					actionListener="#{categoriaBean.salvarOuAtualizar}"
+					oncomplete="PF('wid-edicao').hide();" update=":form-edicao :tabela" />
+
+			</h:panelGrid>
+
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+.formulario {
+	border:1px solid #000;
+}
+*{
+	padding:0;
+	text-decoration: none !important;
+}
+.export {
+	text-align:right !important;
+	width:100% !important;
+}
+body {
+	background-color: #FFF !important;
+}
+
+

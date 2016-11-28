@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Financeiro</title>
+	
+</h:head>
+<h:body>
+
+	<ui:include src="template.xhtml" />
+
+	<p:panel header="Lançar despesas e receitas"
+		style="width:70%; margin-right:100px; float:right">
+
+		<p:messages autoUpdate="true" closable="true" />
+
+		<h:form id="form-financeiro">
+
+			<h:panelGrid columns="4" cellspacing="10">
+
+				<p:outputLabel value="Tipo:" />
+				<p:selectOneMenu value="#{financeiroBean.financeiro.tipo}">
+					<f:selectItem itemValue="Receita" itemLabel="Receita" />
+					<f:selectItem itemValue="Despesa" itemLabel="Despesa" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Valor:" />
+				<p:inputNumber id="valor" value="#{financeiroBean.financeiro.valor}"
+					decimalSeparator="," thousandSeparator=".">
+					<p:ajax update="valor" process="valor" event="change" />
+
+				</p:inputNumber>
+
+				<p:outputLabel value="Data:" />
+				<p:calendar value="#{financeiroBean.financeiro.data}"
+					mask="99/99/9999" pattern="dd/MM/yyyy" locale="pt"> 
+					<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+				</p:calendar>
+
+				<p:outputLabel value="Status:" />
+				<p:selectOneMenu value="#{financeiroBean.financeiro.status}">
+					<f:selectItem itemValue="Pago" itemLabel="Pago" />
+					<f:selectItem itemValue="Pendente" itemLabel="Pendente" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Descrição: " />
+				<p:inputText value="#{financeiroBean.financeiro.descricao}"
+					style="width:300px;" />
+
+				<p:outputLabel value="Categoria:" />
+
+				<p:selectOneMenu value="#{financeiroBean.financeiro.categoria}">
+					<f:selectItem itemLabel="Selecione um" />
+					<f:selectItems value="#{financeiroBean.listaCategorias}"
+						var="categoria" itemValue="#{categoria}"
+						itemLabel="#{categoria.nomeCategoria}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<p:spacer height="10px" />
+			<hr />
+
+			<h:panelGrid>
+				<p:commandButton value="Salvar"
+					actionListener="#{financeiroBean.salvarOuAtualizar}"
+					update=":form-financeiro" />
+			</h:panelGrid>
+
+		</h:form>
+
+		<p:spacer height="10px" />
+
+	</p:panel>
+
+
+</h:body>
+</html>

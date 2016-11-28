@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Consultar lançamentos</title>
+	<style>
+.ui-datatable {
+	font-size: 14px !important;
+}
+</style>
+</h:head>
+<h:body>
+
+	<ui:include src="template.xhtml" />
+
+	<p:panel header="Consultar Lançamentos" style="width:82%; float:right">
+
+		<p:messages autoUpdate="true" closable="true" />
+		<h:form id="pesquisa">
+			<h:panelGrid columns="4" cellspacing="10px">
+
+				<p:outputLabel value="Mês: " />
+				<p:selectOneMenu value="#{consultaFinanceiroBean.mes}"
+					style="width:210px">
+					<f:selectItem itemLabel="Selecione um" />
+					<f:selectItem itemValue="1" itemLabel="Janeiro" />
+					<f:selectItem itemValue="2" itemLabel="Fevereiro" />
+					<f:selectItem itemValue="3" itemLabel="Março" />
+					<f:selectItem itemValue="4" itemLabel="Abril" />
+					<f:selectItem itemValue="5" itemLabel="Maio" />
+					<f:selectItem itemValue="6" itemLabel="Junho" />
+					<f:selectItem itemValue="7" itemLabel="Julho" />
+					<f:selectItem itemValue="8" itemLabel="Agosto" />
+					<f:selectItem itemValue="9" itemLabel="Setembro" />
+					<f:selectItem itemValue="10" itemLabel="Outubro" />
+					<f:selectItem itemValue="11" itemLabel="Novembro" />
+					<f:selectItem itemValue="12" itemLabel="Dezembro" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Categoria:" />
+				<p:selectOneMenu value="#{consultaFinanceiroBean.filtro.categoria}">
+					<f:selectItem itemLabel="Selecione uma" />
+					<f:selectItems value="#{financeiroBean.listaCategorias}"
+						var="categoria" itemValue="#{categoria}"
+						itemLabel="#{categoria.nomeCategoria}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Descrição:" />
+				<p:inputText value="#{consultaFinanceiroBean.filtro.descricao}"/>
+
+			</h:panelGrid>
+
+			<p:commandButton value="Pesquisar" icon="ui-icon-search"
+				actionListener="#{consultaFinanceiroBean.consultaPorMes}"
+				update=":tabela" style="margin-top:10px" />
+
+		</h:form>
+
+		<hr />
+
+		<div class="export">
+			<h:form>
+
+				<p:tooltip for="pdf" value="Exportar para PDF" position="bottom"
+					showEffect="clip" hideEffect="clip" />
+
+				<p:tooltip for="xls" value="Exportar para XLS" position="bottom"
+					showEffect="clip" hideEffect="clip" />
+
+				<h:commandLink id="pdf">
+					<p:graphicImage library="img" name="pdf.jpg" width="34" height="34" />
+					<p:dataExporter type="pdf" target="tabela" fileName="financeiro"
+						pageOnly="true" />
+				</h:commandLink>
+				
+				<p:spacer width="12" />
+				
+				<h:commandLink id="xls">
+					<p:graphicImage library="img" name="xls.png" width="34" height="34" />
+					<p:dataExporter type="xls" target="tabela" fileName="financeiro"
+						pageOnly="true" />
+				</h:commandLink>
+			</h:form>
+		</div>
+
+		<p:dataTable id="tabela" paginator="true" rows="4"
+			paginatorPosition="bottom"
+			value="#{consultaFinanceiroBean.listaLancamentos}" var="fic"
+			emptyMessage="Nenhum registro encontrado!">
+
+			<p:column id="tipo" headerText="Tipo">
+				<p:outputLabel value="#{fic.tipo}" />
+			</p:column>
+
+			<p:column headerText="Descrição" width="320">
+				<p:outputLabel value="#{fic.descricao}" />
+			</p:column>
+
+			<p:column headerText="Categoria">
+				<p:outputLabel value="#{fic.categoria.nomeCategoria}" />
+			</p:column>
+
+			<p:column headerText="Valor">
+				<p:outputLabel value="#{fic.valor}">
+					<f:convertNumber pattern="#,##0.00" currencySymbol="R$" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Data">
+				<p:outputLabel value="#{fic.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Status">
+				<p:outputLabel value="#{fic.status}" />
+			</p:column>
+
+			<p:column headerText="Ações" width="190" exportable="false">
+				<p:commandButton value="Editar" icon="fa fa-pencil"
+					onclick="PF('wid-edicao').show();" update=":edicao">
+					<f:setPropertyActionListener value="#{fic}"
+						target="#{consultaFinanceiroBean.financeiro}" />
+				</p:commandButton>
+
+				<p:commandButton value="Excluir" icon="fa fa-trash"
+					onclick="PF('wid-exclusao').show();" update=":edicao"
+					style="margin-left:5px">
+					<f:setPropertyActionListener value="#{fic}"
+						target="#{consultaFinanceiroBean.financeiro}" />
+				</p:commandButton>
+			</p:column>
+
+			<f:facet name="footer">
+				<p:outputLabel value="Saldo: " />
+				<p:outputLabel value="#{consultaFinanceiroBean.saldo}">
+					<f:convertNumber pattern="#,##0.00" />
+				</p:outputLabel>
+			</f:facet>
+		</p:dataTable>
+
+	</p:panel>
+
+	<!-- Diálogo de edição -->
+
+	<p:dialog widgetVar="wid-edicao" showEffect="clip" hideEffect="clip"
+		draggable="false" modal="true" header="Editar Lançamento">
+
+		<h:form id="edicao">
+
+			<h:panelGrid columns="4" cellspacing="10">
+
+				<p:outputLabel value="Tipo:" />
+				<p:selectOneMenu value="#{consultaFinanceiroBean.financeiro.tipo}">
+					<f:selectItem itemValue="Receita" itemLabel="Receita" />
+					<f:selectItem itemValue="Despesa" itemLabel="Despesa" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Valor:" />
+				<p:inputText id="valor"
+					value="#{consultaFinanceiroBean.financeiro.valor}">
+					<f:convertNumber pattern="#,##0.00" />
+					<p:ajax update="valor" process="valor" event="change"></p:ajax>
+				</p:inputText>
+
+				<p:outputLabel value="Data:" />
+				<p:calendar value="#{consultaFinanceiroBean.financeiro.data}"
+					mask="99/99/9999" pattern="dd/MM/yyyy">
+					<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+				</p:calendar>
+
+				<p:outputLabel value="Status:" />
+				<p:selectOneMenu value="#{consultaFinanceiroBean.financeiro.status}">
+					<f:selectItem itemValue="Pago" itemLabel="Pago" />
+					<f:selectItem itemValue="Pendente" itemLabel="Pendente" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Descrição: " />
+				<p:inputText value="#{consultaFinanceiroBean.financeiro.descricao}"
+					style="width:300px;" />
+
+				<p:outputLabel value="Categoria:" />
+
+				<p:selectOneMenu
+					value="#{consultaFinanceiroBean.financeiro.categoria}">
+					<f:selectItem itemLabel="Selecione um" />
+					<f:selectItems value="#{financeiroBean.listaCategorias}"
+						var="categoria" itemValue="#{categoria}"
+						itemLabel="#{categoria.nomeCategoria}" />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<p:spacer height="10px" />
+			<hr />
+
+			<h:panelGrid>
+				<p:commandButton value="Atualizar"
+					actionListener="#{consultaFinanceiroBean.editar}"
+					oncomplete="PF('wid-edicao').hide();" update=":edicao :tabela" />
+			</h:panelGrid>
+
+		</h:form>
+
+	</p:dialog>
+
+	<!-- Diálogo de exclusão -->
+
+	<p:dialog header="Excluir Lançamento" widgetVar="wid-exclusao"
+		showEffect="clip" hideEffect="clip" draggable="false"
+		resizable="false" responsive="true" modal="true">
+
+		<p:outputLabel value="Deseja realmente excluir o lançamento?" />
+
+		<h:form id="form-exclusao">
+			<h:panelGrid columns="2">
+				<p:commandButton value="Sim"
+					actionListener="#{consultaFinanceiroBean.excluir}"
+					oncomplete="PF('wid-exclusao').hide();" update=":tabela" />
+				<p:commandButton value="Não" oncomplete="PF('wid-exclusao').hide();" />
+			</h:panelGrid>
+		</h:form>
+
+	</p:dialog>
+
+</h:body>
+</html>

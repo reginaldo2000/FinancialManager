@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<h:outputStylesheet library="iconfont" name="material-icons.css" />
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputScript library="js" name="locale.js" />
+</h:head>
+<h:body>
+
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{loginBean.validar}" />
+	</f:metadata>
+
+	<h:form>
+
+		<h:panelGrid columns="2" style="width:100%">
+
+			<p:graphicImage library="img" name="cat.png" style="float:left" />
+			
+			<p:outputLabel style="float:right" value="Bem vindo #{loginBean.usuario.usuario}" />
+
+		</h:panelGrid>
+		<p:separator />
+		<p:spacer height="20px" />
+		
+		<h:panelGrid columns="1">
+
+			
+
+			<p:panelMenu style="width:15%; float:left; position:absolute">
+
+				<p:submenu label="Início">
+					<p:menuitem value="Página Inicial" outcome="inicial.xhtml" />
+				</p:submenu>
+
+				<p:submenu label="Categoria">
+					<p:menuitem value="Cadastrar" outcome="cad_categoria.xhtml"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Consultar" outcome="consultar_categoria.xhtml"
+						icon="ui-icon-search" />
+				</p:submenu>
+
+				<p:submenu label="Financeiro">
+					<p:menuitem value="Cadastrar" outcome="cad_financeiro.xhtml"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Consultar" outcome="consulta_financeiro.xhtml"
+						icon="ui-icon-search" />
+				</p:submenu>
+
+				<p:submenu label="Sair">
+					<p:menuitem value="Encerrar Sessão"
+						actionListener="#{loginBean.sair}" />
+				</p:submenu>
+
+			</p:panelMenu>
+
+		</h:panelGrid>
+
+	</h:form>
+</h:body>
+</html>
